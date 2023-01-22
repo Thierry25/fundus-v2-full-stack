@@ -1,17 +1,20 @@
 package com.thierry.fundusv2.models;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name="accounts")
+@JsonFilter("accountFilter")
 public class Account {
     @Id
     @GeneratedValue
+    @JsonIgnore
     private Integer id;
 
     @Size(min=2, max = 20, message = "Please enter at least 2 characters and less than 20 characters")
@@ -28,6 +31,7 @@ public class Account {
 
     @Size(min=12, max=30, message = "Please enter at least 12 characters and less than 30 characters")
     @Column(nullable = false)
+    @JsonIgnore
     private String password;
 
     @Column(unique = true, nullable = false)

@@ -8,6 +8,6 @@ public interface AccountService {
     Account createAccount(Account account);
     Account findByUsername(String username);
     Account updateAccount(Account account);
-    Account deleteAccountByUsername(String username);
+    void deleteAccountByUsername(String username);
     List<Account> getAllAccounts();
 }

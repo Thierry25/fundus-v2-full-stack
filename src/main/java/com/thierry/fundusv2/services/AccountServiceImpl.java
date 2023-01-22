@@ -23,22 +23,22 @@ public class AccountServiceImpl implements AccountService{
 
     @Override
     public Account findByUsername(String username) {
-        // TO UPDATE
         return accountRepository.findByUsername(username).orElseThrow(() -> new UserNotFound("User Not Found"));
     }
 
     @Override
     public Account updateAccount(Account account) {
-        return null;
+        return accountRepository.save(account);
     }
 
     @Override
-    public Account deleteAccountByUsername(String username) {
-        return null;
+    public void deleteAccountByUsername(String username) {
+        var account = findByUsername(username);
+        accountRepository.delete(account);
     }
 
     @Override
     public List<Account> getAllAccounts() {
-        return null;
+        return accountRepository.findAll();
     }
 }
