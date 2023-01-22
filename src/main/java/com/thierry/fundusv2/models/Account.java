@@ -42,6 +42,79 @@ public class Account {
     )
     private List<Occupation> occupations;
 
-    @OneToMany
+    @OneToMany(mappedBy = "requestor")
     private List<HelpRequest> requests;
+
+    @OneToMany(mappedBy = "donor")
+    private List<Donation> donations;
+
+    public Account(){}
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public List<Occupation> getOccupations() {
+        return occupations;
+    }
+
+    public List<HelpRequest> getRequests() {
+        return requests;
+    }
+
+    public List<Donation> getDonations() {
+        return donations;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setOccupations(List<Occupation> occupations) {
+        this.occupations = occupations;
+    }
+
+    public void setRequests(List<HelpRequest> requests) {
+        this.requests = requests;
+    }
+
+    public void setDonations(List<Donation> donations) {
+        this.donations = donations;
+    }
 }

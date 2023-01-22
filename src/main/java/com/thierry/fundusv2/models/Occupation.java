@@ -1,19 +1,20 @@
 package com.thierry.fundusv2.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "occupations")
 public class Occupation {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     private String occupationName;
     // private String description
+    @ManyToMany(mappedBy="occupations")
+    private List<Account> accounts;
 
     public Occupation(){}
 
@@ -27,5 +28,17 @@ public class Occupation {
 
     public String getOccupationName() {
         return occupationName;
+    }
+
+    public List<Account> getAccounts() {
+        return accounts;
+    }
+
+    public void setOccupationName(String occupationName) {
+        this.occupationName = occupationName;
+    }
+
+    public void setAccounts(List<Account> accounts) {
+        this.accounts = accounts;
     }
 }
