@@ -23,7 +23,7 @@ public class HelpRequest {
     @Column(nullable = false)
     private String title;
 
-    @Size(min = 20, max= 1440, message = "Please enter a description between 20 and 1440 characters")
+    @Size(min = 15, max= 1440, message = "Please enter a description between 20 and 1440 characters")
     @Column(nullable = false)
     private String description;
 
