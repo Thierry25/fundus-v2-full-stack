@@ -2,9 +2,9 @@ package com.thierry.fundusv2.controllers;
 
 import com.thierry.fundusv2.models.Account;
 import com.thierry.fundusv2.services.AccountService;
+import com.thierry.fundusv2.services.OccupationService;
 import com.thierry.fundusv2.utils.Filtering;
 import jakarta.validation.Valid;
-import org.apache.coyote.Response;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
@@ -13,15 +13,20 @@ import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.util.Arrays;
+import java.util.Collections;
+
 @RestController
 @RequestMapping("/accounts")
 public class AccountController {
 
     private static final String ACCOUNT_FILTER = "accountFilter";
     private final AccountService accountService;
+    private final OccupationService occupationService;
 
-    public AccountController(AccountService accountService){
+    public AccountController(AccountService accountService, OccupationService occupationService){
         this.accountService = accountService;
+        this.occupationService = occupationService;
     }
 
     @GetMapping
@@ -31,12 +36,16 @@ public class AccountController {
     }
 
     @PostMapping
-    public MappingJacksonValue createNewAccount(@Valid @RequestBody Account account){
+    public MappingJacksonValue createNewAccount(@Valid @RequestBody Account account, @RequestParam String occupation){
+        var newOccupation = occupation.replace("+", " ");
+        var occupationName = occupationService.getOccupationName(newOccupation);
+        account.setOccupations(Collections.singletonList(occupationName));
         var newAccount = accountService.createAccount(account);
         var location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{username}")
                 .buildAndExpand(newAccount.getUsername())
                 .toUri();
+
         var response = ResponseEntity.created(location);
         return Filtering.filter(response.body(newAccount), ACCOUNT_FILTER,"firstName", "lastName", "username", "email");
     }

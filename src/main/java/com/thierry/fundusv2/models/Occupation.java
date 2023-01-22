@@ -11,31 +11,31 @@ public class Occupation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private String occupationName;
+    private String name;
     // private String description
     @ManyToMany(mappedBy="occupations")
     private List<Account> accounts;
 
     public Occupation(){}
 
-    public Occupation(String occupationName) {
-        this.occupationName = occupationName;
+    public Occupation(String name) {
+        this.name = name;
     }
 
     public Integer getId() {
         return id;
     }
 
-    public String getOccupationName() {
-        return occupationName;
+    public String getName() {
+        return name;
     }
 
     public List<Account> getAccounts() {
         return accounts;
     }
 
-    public void setOccupationName(String occupationName) {
-        this.occupationName = occupationName;
+    public void setName(String occupationName) {
+        this.name = occupationName;
     }
 
     public void setAccounts(List<Account> accounts) {
