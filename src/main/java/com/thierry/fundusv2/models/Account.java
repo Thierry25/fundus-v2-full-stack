@@ -29,9 +29,8 @@ public class Account {
     @Column(unique=true, nullable = false)
     private String email;
 
-    @Size(min=12, max=30, message = "Please enter at least 12 characters and less than 30 characters")
     @Column(nullable = false)
-    @JsonIgnore
+    @Size(min=12, max=30, message = "Please enter at least 12 characters and less than 30 characters")
     private String password;
 
     @Column(unique = true, nullable = false)
@@ -90,6 +89,10 @@ public class Account {
         return id;
     }
 
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
@@ -121,4 +124,6 @@ public class Account {
     public void setDonations(List<Donation> donations) {
         this.donations = donations;
     }
+
+
 }

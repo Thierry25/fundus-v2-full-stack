@@ -27,8 +27,11 @@ public class AccountServiceImpl implements AccountService{
     }
 
     @Override
-    public Account updateAccount(Account account) {
-        return accountRepository.save(account);
+    public Account updateAccount(String username, Account updatedAccount) {
+        var account = findByUsername(username);
+        updatedAccount.setId(account.getId());
+        updatedAccount.setUsername(username);
+        return accountRepository.save(updatedAccount);
     }
 
     @Override
