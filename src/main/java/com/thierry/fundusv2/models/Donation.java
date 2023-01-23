@@ -1,23 +1,30 @@
 package com.thierry.fundusv2.models;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.List;
 
 @Entity
+@JsonFilter("donationFilter")
 @Table(name = "donations")
 public class Donation {
     @Id
     @GeneratedValue
+
     private Integer id;
 
     @ManyToOne
     @JsonIgnore
     private Account donor;
-    @Column(nullable = true)
+    @Column(nullable = false)
     private String identifier;
 
+    @Column(nullable = false)
+    private Integer amount;
+
+    @JsonIgnore
     @ManyToMany(mappedBy = "donations")
     private List<HelpRequest> requests;
 
@@ -63,5 +70,13 @@ public class Donation {
 
     public void setRequests(List<HelpRequest> requests) {
         this.requests = requests;
+    }
+
+    public Integer getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Integer amount) {
+        this.amount = amount;
     }
 }

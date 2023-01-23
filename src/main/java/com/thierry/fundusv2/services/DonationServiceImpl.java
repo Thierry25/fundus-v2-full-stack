@@ -23,6 +23,7 @@ public class DonationServiceImpl implements DonationService{
 
     @Override
     public Donation addDonation(Integer id, Donation donation) {
+        // ToDo: VIA THE TOKEN --> Find the donor %?%
         var request = requestRepository.findById(id).orElseThrow(() -> new RequestNotFound("Request Not Found"));
         donation.setRequests(Collections.singletonList(request));
         return donationRepository.save(donation);

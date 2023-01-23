@@ -1,6 +1,8 @@
 package com.thierry.fundusv2.controllers;
 
+import com.thierry.fundusv2.models.Donation;
 import com.thierry.fundusv2.models.HelpRequest;
+import com.thierry.fundusv2.services.DonationService;
 import com.thierry.fundusv2.services.HelpRequestService;
 import com.thierry.fundusv2.utils.Filtering;
 import jakarta.validation.Valid;
@@ -17,10 +19,13 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 public class HelpRequestController {
 
     private final HelpRequestService requestService;
+    private final DonationService donationService;
     private static final String REQUEST_FILTER = "requestFilter";
+    private static final String DONATION_FILTER = "donationFilter";
 
-    public HelpRequestController(HelpRequestService requestService){
+    public HelpRequestController(HelpRequestService requestService, DonationService donationService){
         this.requestService = requestService;
+        this.donationService = donationService;
     }
 
     @GetMapping("/{username}/")
@@ -88,5 +93,24 @@ public class HelpRequestController {
     public void deleteRequest(@PathVariable Integer id){
         requestService.deleteRequest(id);
     }
+
+    // ADD DONATIONS TO A GIVEN REQUEST -> find the given username via the token -> Help from Fa !!
+    @PostMapping("/{id}/donations")
+    public MappingJacksonValue addDonationToRequest(@PathVariable Integer id, @Valid @RequestBody Donation donation){
+        var newDonation = donationService.addDonation(id, donation);
+        var location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(newDonation.getId())
+                .toUri();
+        var response = ResponseEntity.created(location);
+        return Filtering.filter(response.body(newDonation), DONATION_FILTER, "identifier", "amount");
+    }
+
+    @GetMapping("/{id}/donations")
+    public MappingJacksonValue getRequestDonations(@PathVariable Integer id){
+        var donations = requestService.getRequest(id).getDonations();
+        return Filtering.filter(donations, DONATION_FILTER, "identifier", "amount");
+    }
+
 
 }
