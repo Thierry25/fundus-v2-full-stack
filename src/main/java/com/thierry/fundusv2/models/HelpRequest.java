@@ -38,13 +38,13 @@ public class HelpRequest {
     private String location;
 
     @ManyToMany
-    @JoinTable(name = "requests_donations",
-    joinColumns = {@JoinColumn(name="REQUEST_ID", referencedColumnName = "ID")},
+    @JoinTable(name="requests_donations",
+    joinColumns = {@JoinColumn(name = "REQUEST_ID", referencedColumnName = "ID")},
     inverseJoinColumns = {@JoinColumn(name="DONATION_ID", referencedColumnName = "ID")})
+
     private List<Donation> donations;
 
-    private boolean isActive;
-
+    private boolean isActive = true;
 
     public HelpRequest(){}
 
@@ -111,4 +111,5 @@ public class HelpRequest {
     public void setActive(boolean active) {
         isActive = active;
     }
+
 }

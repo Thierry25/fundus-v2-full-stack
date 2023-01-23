@@ -52,4 +52,16 @@ public class Donation {
     public void setComment(String comment) {
         this.comment = comment;
     }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public List<HelpRequest> getRequests() {
+        return requests;
+    }
+
+    public void setRequests(List<HelpRequest> requests) {
+        this.requests = requests;
+    }
 }

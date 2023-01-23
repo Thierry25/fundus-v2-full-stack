@@ -3,12 +3,14 @@ package com.thierry.fundusv2.controllers;
 import com.thierry.fundusv2.models.HelpRequest;
 import com.thierry.fundusv2.services.HelpRequestService;
 import com.thierry.fundusv2.utils.Filtering;
+import jakarta.validation.Valid;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 @RequestMapping("/requests")
@@ -60,6 +62,31 @@ public class HelpRequestController {
     public MappingJacksonValue getAllRequests(){
         var requests = requestService.getAllRequests();
         return Filtering.filter(requests, REQUEST_FILTER, "id", "title", "description", "amount");
+    }
+
+    @PostMapping("/{username}/new")
+    public MappingJacksonValue addNewRequest(@PathVariable String username, @Valid @RequestBody HelpRequest request){
+        var newRequest = requestService.createNewRequest(username, request);
+        // TO SEND TO NEW DIRECTION
+        var location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .replacePath("/requests/{id}")
+                .buildAndExpand(newRequest.getId())
+                .toUri();
+        var response = ResponseEntity.created(location);
+        return Filtering.filter(response.body(newRequest), REQUEST_FILTER, "title", "description", "amount", "location");
+    }
+
+    // TODO: TO REFACTOR => Know which user is signed up via the token!!
+    @PatchMapping("/{username}/{id}")
+    public MappingJacksonValue updateRequest(@PathVariable String username,
+                                             @PathVariable Integer id,
+                                             @Valid @RequestBody HelpRequest helpRequest){
+        var request = requestService.updateRequest(id, username, helpRequest);
+        return Filtering.filter(request, REQUEST_FILTER, "title", "description", "amount","location");
+    }
+    @DeleteMapping("/{id}")
+    public void deleteRequest(@PathVariable Integer id){
+        requestService.deleteRequest(id);
     }
 
 }
