@@ -9,7 +9,7 @@ import jakarta.validation.constraints.Size;
 import java.util.List;
 
 @Entity
-@Table(name="accounts")
+@Table(name = "accounts")
 @JsonFilter("accountFilter")
 public class Account {
     @Id
@@ -17,24 +17,24 @@ public class Account {
     @JsonIgnore
     private Integer id;
 
-    @Size(min=2, max = 20, message = "Please enter at least 2 characters and less than 20 characters")
+    @Size(min = 2, max = 20, message = "Please enter at least 2 characters and less than 20 characters")
     @Column(nullable = false)
     private String firstName;
 
-    @Size(min=2, max = 20, message = "Please enter at least 2 characters and less than 20 characters")
+    @Size(min = 2, max = 20, message = "Please enter at least 2 characters and less than 20 characters")
     @Column(nullable = false)
     private String lastName;
 
     @Email(message = "Email is invalid")
-    @Column(unique=true, nullable = false)
+    @Column(unique = true, nullable = false)
     private String email;
 
     @Column(nullable = false)
-    @Size(min=12, max=30, message = "Please enter at least 12 characters and less than 30 characters")
+    @Size(min = 12, max = 30, message = "Please enter at least 12 characters and less than 30 characters")
     private String password;
 
     @Column(unique = true, nullable = false)
-    @Size(min= 6, max= 24, message = "Please enter at least 6 characters and less than 24 characters")
+    @Size(min = 6, max = 24, message = "Please enter at least 6 characters and less than 24 characters")
     private String username;
 
     @ManyToMany
@@ -51,7 +51,8 @@ public class Account {
     @OneToMany(mappedBy = "donor")
     private List<Donation> donations;
 
-    public Account(){}
+    public Account() {
+    }
 
     public String getFirstName() {
         return firstName;

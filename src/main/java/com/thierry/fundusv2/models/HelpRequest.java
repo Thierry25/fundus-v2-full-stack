@@ -1,5 +1,6 @@
 package com.thierry.fundusv2.models;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
@@ -9,6 +10,7 @@ import jakarta.validation.constraints.Size;
 import java.util.List;
 
 @Entity
+@JsonFilter("requestFilter")
 @Table(name = "requests")
 public class HelpRequest {
     @Id

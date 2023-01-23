@@ -6,6 +6,7 @@ import com.thierry.fundusv2.models.HelpRequest;
 import com.thierry.fundusv2.repositories.AccountRepository;
 import com.thierry.fundusv2.repositories.HelpRequestRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -36,11 +37,28 @@ public class HelpRequestServiceImpl implements HelpRequestService {
     }
 
     @Override
-    public List<HelpRequest> getShortRequests() {
+    public List<HelpRequest> getShortRequests(int length) {
         var requests = getAllRequests();
         return requests
                 .stream()
-                .filter((request) -> request.getDescription().length() <= 20)
+                .filter((request) -> request.getDescription().length() <= length)
+                .toList();
+    }
+
+
+    @Override
+    public List<HelpRequest> getAffordableRequests(int amount) {
+        return getAllRequests()
+                .stream()
+                .filter((req) -> req.getAmount() <= amount)
+                .toList();
+    }
+
+    @Override
+    public List<HelpRequest> getFilteredRequests(String startsWith) {
+        return getAllRequests()
+                .stream()
+                .filter((req) -> StringUtils.startsWithIgnoreCase(req.getDescription(),(startsWith)))
                 .toList();
     }
 
