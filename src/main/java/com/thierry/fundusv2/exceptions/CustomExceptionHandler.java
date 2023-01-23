@@ -21,11 +21,12 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @ExceptionHandler(UserNotFound.class)
+    @ExceptionHandler({UserNotFound.class, RequestNotFound.class})
     public ResponseEntity<ErrorDetails> handleUserNotFound(Exception ex, WebRequest request){
         var error = new ErrorDetails(LocalDateTime.now(), ex.getLocalizedMessage(), request.getDescription(false));
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
+
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
@@ -36,4 +37,5 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
         var error = new ErrorDetails(LocalDateTime.now(), message.toString(), request.getDescription(false));
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
+
 }

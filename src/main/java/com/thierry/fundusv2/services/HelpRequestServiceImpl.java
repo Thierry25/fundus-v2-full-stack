@@ -8,28 +8,28 @@ import com.thierry.fundusv2.repositories.HelpRequestRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class HelpRequestServiceImpl implements HelpRequestService {
-    private final HelpRequestRepository helpRepo;
+    private final HelpRequestRepository requestRepo;
     private final AccountRepository accountRepo;
 
-    public HelpRequestServiceImpl(HelpRequestRepository helpRepo, AccountRepository accountRepo) {
-        this.helpRepo = helpRepo;
+    public HelpRequestServiceImpl(HelpRequestRepository requestRepo, AccountRepository accountRepo) {
+        this.requestRepo = requestRepo;
         this.accountRepo = accountRepo;
     }
 
     @Override
     public List<HelpRequest> getAllRequests() {
-        var requests = helpRepo.findAll();
+        var requests = requestRepo.findAll();
         if (requests.isEmpty()) throw new RequestNotFound("Request Not Found");
         return requests;
     }
 
     @Override
     public List<HelpRequest> getAllMyRequests(String username) {
-        var currentUser = accountRepo.findByUsername(username).orElseThrow(() -> new UserNotFound("User not Found"));
+        var currentUser = accountRepo.findByUsername(username)
+                .orElseThrow(() -> new UserNotFound("User not Found"));
         var requests = currentUser.getRequests();
         if (requests.isEmpty()) throw new RequestNotFound("No requests found for this user");
         return requests;
@@ -46,21 +46,27 @@ public class HelpRequestServiceImpl implements HelpRequestService {
 
     @Override
     public HelpRequest getRequest(int id) {
-        return null;
+        return requestRepo.findById(id).orElseThrow(()-> new RequestNotFound("Request Not Found"));
     }
 
     @Override
-    public HelpRequest createNewRequest(HelpRequest helpRequest) {
-        return null;
+    public HelpRequest createNewRequest(String username, HelpRequest helpRequest) {
+        var currentUser = accountRepo.findByUsername(username).orElseThrow(() -> new UserNotFound("User not Found"));
+        helpRequest.setRequestor(currentUser);
+        return requestRepo.save(helpRequest);
     }
 
     @Override
-    public HelpRequest updateRequest(String username, HelpRequest helpRequest) {
-        return null;
+    public HelpRequest updateRequest(Integer id, String username, HelpRequest helpRequest) {
+        var currentUser = accountRepo.findByUsername(username).orElseThrow(() -> new UserNotFound("User not Found"));
+        helpRequest.setRequestor(currentUser);
+        helpRequest.setId(id);
+        return requestRepo.save(helpRequest);
     }
 
     @Override
-    public void deleteRequest(int id, String username) {
-
+    public void deleteRequest(int id) {
+        var req = requestRepo.findById(id).orElseThrow(() -> new RequestNotFound("Request Not Found"));
+        requestRepo.delete(req);
     }
 }

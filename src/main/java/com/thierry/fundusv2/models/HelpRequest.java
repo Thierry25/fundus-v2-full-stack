@@ -90,6 +90,10 @@ public class HelpRequest {
         this.description = description;
     }
 
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public void setAmount(Integer amount) {
         this.amount = amount;
     }
